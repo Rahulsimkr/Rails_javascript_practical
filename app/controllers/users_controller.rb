@@ -1,35 +1,60 @@
 class UsersController < ApplicationController
-  before_action :find_user, only: [:show, :edit, :update, :destroy]
+  before_action :find_user, only: %i[ show edit update destroy user_profile update_profile change_password update_password ]
 
   def index
-    @users = User.all
-  end
-
-  def new
+    @users = User.order(created_at: :desc)
     @user = User.new
   end
 
   def create
-    @user = User.create(user_params)
+    @user = User.new(user_param)
     if @user.save
-      flash[:notice] = "User is successfully created 👍"
-      redirect_to users_path
+      respond_to do |format|
+        flash[:notice] = "User is successfully created....👍"
+        format.js
+      end
     else
-      flash[:notice] = "Something went wrong 👍"
-      render :new, status: :unprocessable_entity
+      respond_to do |format|
+        flash[:notice] = "something went wrong....👍"
+        format.js
+      end
     end
   end
 
   def edit
+    @user = User.find(params[:id])
   end
 
   def update
-    if @user = User.update(user_params)
-      flash[:notice] = "User  successfully edited 👍"
-      redirect_to users_path
+    @user = User.find(params[:id])
+    @user_data = User.find_by_id(@user)
+    @user.update(user_param)
+    if @user.valid?
+      respond_to do |format|
+        flash[:notice] = "Profile updated successfully"
+        format.js
+      end
     else
-      render :edit, status: :unprocessable_entity
-      flash[:notice] = "Something went wrong 👍"
+      respond_to do |format|
+        flash[:errors] = @user.errors.full_messages
+        format.js
+        format.html { render :edit, status: :unprocessable_entity }
+      end
+    end
+  end
+
+  def change_password
+    @user = User.find(params[:id])
+  end
+
+  def password_update
+    @user = User.find(params[:id])
+    if @user.update_attribute(:password, params[:new_password])
+      flash[:notice] = "Password was changed successfully."
+      redirect_to user_path(@user)
+    else
+      flash[:errors] = @user.errors.full_messages
+      redirect_to password_update_user_path(@user)
     end
   end
 
@@ -39,7 +64,9 @@ class UsersController < ApplicationController
   def destroy
     @user.destroy
     redirect_to users_path
-    flash[:notice] = "User has been successfully deleted 💬"
+  end
+
+  def check_password
   end
 
   private
@@ -48,7 +75,7 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
   end
 
-  def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :password, :subscription_email)
+  def user_param
+    params.require(:user).permit(:first_name, :last_name, :email, :password, :confirm_password, :subscription, :subscription_email)
   end
 end
