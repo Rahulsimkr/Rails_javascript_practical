@@ -1,0 +1,163 @@
+<div class="container my-3">
+<div class="row justify-content-center">
+<div class="col-19 my-4">
+<div class="card text-center shadow mb-5 bg-light">
+
+<h2 class="text-center mb-3 mt-3">
+  <mark>List of all users</mark>
+</h2>
+
+<% if flash[:errors] %>
+  <% flash[:errors].each do |error| %>
+    <p style = "color:red"><%= error %></p>
+  <% end %>
+<% end %>
+
+<% # *********** Code for Show Index ************ %>
+<div id="error">
+</div>
+<div>
+<table border='2px' id="user-data"  >
+	<tr>
+		<th>First Name</th>
+		<th>Last Name</th>
+		<th>Subscription</th>
+    <th colspan="4" >Action</th>	
+	</tr>
+  <tbody id="userTable">
+	  <% @users.each do |user| %>
+	  	<%= render "user_row", user: user %>
+	  <% end %>
+  </tbody>
+</table>
+</div>
+
+<div id="target-for-change">
+</div>
+
+<center>
+  <div class="mb-3 mt-3" > 
+    <button class="btn btn-success" id="myBtn" >Add new user</button>
+  </div>
+</center>
+<% # *********** Code for Model Bootstrap for New user ************ %>
+
+<div id="myModal" class="modal">
+  <!-- Modal content -->
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <div class="container" >
+   <h1 class="bg-success text-danger" > New User</h1>
+   </div>
+  <%= form_with(model: @user, local: false) do |form| %>
+  <%= form.text_field :first_name, placeholder: "First Name", class: "form-control", onchange: "this.style.backgroundColor='	#FFE4B5';fun()" %><br/><br/>
+  
+  <%= form.text_field :last_name, class: "form-control", placeholder: "Last Name" %><br/><br/>
+  <%= form.email_field :email, class: "form-control", placeholder: "email" %><br/><br/>
+  <br><span id = "length" style="color:red"> </span></td>
+  <%= form.password_field :password, placeholder: "password", class: "form-control", :id => "password", onchange: "this.style.backgroundColor='	#FFE4B5';check_validation();" %><br/><br/>
+  <br><span id = "message" style="color:red"> </span>
+  <br><span id = "messageee" style="color:green"> </span>
+  <%= form.password_field :confirm_password, placeholder: "confirm_password", class: "form-control", onchange: "check_password();", :id => "confirm_password" %><br/><br/>
+  <div id = "msg" style="color:red"></div><br/>
+  <%= form.label :Subscribe %>
+  <%= form.check_box :subscription, :id => "check", onclick: "myFunction()" %><br/><br/><center>
+  <%= form.email_field :subscription_email, placeholder: "subscription email", class: "form-control", :id => "email_s", style: "display:none;" %><br/>
+  <div class="modal-footer">
+  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"> Cancel</button>
+  
+  <%= form.submit data: { disable_with: "Saving..." }, :id => "form_submit", style: "display:none;", class: "btn btn-success" %>
+  </div>
+<% end %>
+  </div>
+</div>
+
+<% # ************ Javascript code for New model and index show  ******** %>
+<script>
+function check_validation()
+{
+  var password = document.getElementById("password").value;
+  var regularExpression  = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;  
+  if(!regularExpression.test(password))
+  {
+    document.getElementById("message").innerHTML=
+    " ❌ Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character";
+    document.getElementById("messageee").innerHTML=""
+  }
+  else{
+    document.getElementById("message").innerHTML=
+    "";
+    document.getElementById("messageee").innerHTML=" ✔️ Password is Strong.."
+  }
+}
+
+function check_password()
+{
+  var password = document.getElementById("password").value;
+  var confirm_password = document.getElementById("confirm_password").value;
+  // console.log(password)
+  // console.log(confirm_password)
+  if(password)
+    {
+      if(confirm_password==password)
+        {
+          document.getElementById("check")
+          document.getElementById("form_submit").style.display="block"
+          document.getElementById("msg").innerHTML=" 👍 Password is matched...!";
+        }
+      else
+        {
+          document.getElementById("msg").innerHTML=" ❌ Password doesn't matched..Please Re-enter!";
+          document.getElementById("form_submit").style.display="none"
+        }
+    }
+  else
+    {
+      alert("please first type password")
+      document.getElementById("confirm_password").value=""
+    }
+}
+function myFunction() 
+{
+  var checkBox = document.getElementById("check");
+  var email_field = document.getElementById("email_s");
+  if (checkBox.checked == true)
+  {
+    email_field.style.display="block"
+  } 
+  else 
+  {
+    email_field.style.display="none"
+  }
+}
+// Get the modal
+var modal = document.getElementById("myModal");
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+  modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
+}
+</script>
+
+<hr>
+<div class="my-3">
+<b>@copright ⬛</b>
+</div>

@@ -1,0 +1,4 @@
+var myModal = document.getElementById("myModal");
+$("#userTable").prepend("<%= escape_javascript render('user_row', user: @user) %>");
+myModal.style.display = "none"
+  

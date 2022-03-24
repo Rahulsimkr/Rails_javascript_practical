@@ -1,0 +1,73 @@
+<div class="container my-4 ">
+<div class="row justify-content-center">
+<div class="col-8 mt-4">
+<div class="card text-center shadow mb-5 bg-white" >
+<center>
+  <div class="my-4">
+    <h2><mark>Edit User Profile </mark></h2>
+  </div>
+    <% if flash[:errors] %>
+      <% flash[:errors].each do |error| %>
+        <p style = "color:red"><%= error %></p>
+    <% end %>
+  <% end %>
+    
+  <%= form_with(model: @user, local: false) do |form| %>
+  <table cellpadding="15px">
+    <div>
+      <%= form.label :first_name %><br/>
+      <%= form.text_field :first_name %>
+    </div>
+    <div>
+      <%= form.label :last_name %><br/>
+		  <%= form.text_field :last_name %>
+    </div>
+    <div>
+      <%= form.label :email %><br/>
+      <%= form.email_field :email, id: "email", oninput: "emailChange();" %>
+    </div>
+    <div>
+      <%= form.label :password %><br/>
+      <%= form.password_field :password, placeholder: "please enter your password", id: "pwd1", style: "display:none;" %></td>
+			<span id = "msg" style="color:green"></div>
+    </div>
+    <div>
+      <%= form.label :subscribe %><br/>
+      <span id="myCheck"  onclick="addbox();"><%= form.check_box :subscription %></span>
+    </div>
+    <div>
+      <%= form.label :subscription_email %><br/>
+      <% if @user.subscription %>
+        <%= form.email_field :subscription_email, id: "area" %>
+      <% else %>
+        <%= form.email_field :subscription_email, id: "area", style: "display:none;" %>
+      <% end %>
+    </div>
+  </table> 
+  <div id="button"><%= form.submit data: { disable_with: "Saving..." }, class: "my-4 btn btn-success" %></div><br>
+  <b><%= link_to "Back", users_path, title: "Click to go back" %></b>
+  <% end %><br>
+  <div id="result">
+	</div>
+
+  <% # ************ Javascript Code for Profile edit ******** %>
+  <script>
+    function emailChange()
+    {
+      var email = document.getElementById('email').value;
+      var value = "<%= @user.email %>";
+      if (email != value)
+      {
+        document.getElementById('pwd1').style.display = "block";
+				document.getElementById("msg").innerHTML="Please enter a password...!";
+      }
+    }
+      document.getElementById("myCheck").addEventListener("click", function() {toggle('area');
+    });
+      function toggle(obj) 
+      {
+        var el = document.getElementById(obj);
+        el.style.display = (el.style.display != 'none' ? 'none' : '' );
+      }        
+  </script>
+</center>
