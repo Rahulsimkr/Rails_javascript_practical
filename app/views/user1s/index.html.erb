@@ -1,0 +1,26 @@
+<div class="col-lg-6 mx-lg-auto my-4">
+<div class="card shadow">
+<div class="card-header">
+<h2 class="card-title text-center", style="color:red;">List of all User </h2>
+
+<center>
+  <table>
+    <th>Name</th>
+    <th>Email</th>
+    <th colspan='3'>Actions</th>
+    <% @user1s.each do |user| %>
+      <tr>
+        <td><%= user.name %></td>
+        <td><%= user.email %></td>
+        <td><%= button_to "Show", user1_path(user), method: :get %></td>
+        <td><%= button_to "Edit", edit_user1_path(user), method: :get %></td>
+        <td><%= button_to "Delete", user1_path(user), method: :delete, form: { data: { turbo_confirm: "Are your sure❓" } } %></td>
+      <% end %>
+    </tr>
+  </table>
+</center>
+
+<hr>
+<div class='center my-4'>
+  <%= button_to "new user", new_user1_path, method: :get, class: "btn btn-danger" %>
+</div>
