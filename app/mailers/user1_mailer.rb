@@ -3,13 +3,13 @@ class User1Mailer < ApplicationMailer
 
   def welcome_email
     @user1 = params[:user1]
-    attachments.inline["image.png"] = File.read("app/assets/images/sign.jpg")
+    attachments.inline["image.png"] = File.read("app/assets/images/welcom.jpg")
     mail(to: @user1.email, subject: "Welcome to my site.")
   end
 
   def edit_email
     @user1 = params[:user1]
-    attachement.inline["image.jpg"] = File.read("app/assets/images/sign.jpg")
+    attachement.inline["image.jpg"] = File.read("app/assets/images/edit.jpg")
     mail(to: @user1.email, subject: "Welcome to my site.") do |format|
       format.html { render layout: "email_email" }
       format.text
