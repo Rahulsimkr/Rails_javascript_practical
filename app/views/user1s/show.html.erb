@@ -1,0 +1,29 @@
+<div class="col-lg-6 mx-lg-auto">
+<div class="card shadow">
+<div class="card-header">
+<h2 class="card-title text-center", style="color:red;">User Detials</h2>
+<center>
+  <div class="col-lg-7 mb-3 mt-3">
+    <div class="card" >
+      <div class="card-body">
+        <th ><strong><u> Name:</u></strong></th><br/>
+        <td><%= @user1.name %></th><br/>
+        <th><b><u>Email:</u></b></th><br/>
+        <td><%= @user1.email %></th><br/>
+        <th><b><u>Picture:</u></th></b><br/>
+        <% if @user1.picture.attached? %>
+          <% @user1.picture.each do |attachment| %>
+            <td><%= image_tag attachment, width: "200px" %></th><br/>	
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</center>
+</div>
+
+<center>
+<div>
+  <td><%= button_to "Back ", user1s_path(@user1), method: :get, class: "btn btn-primary float-right my-3 " %></td>
+</div>
+</center>
